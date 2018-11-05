@@ -27,14 +27,16 @@ Game.prototype.clear = function() {
 }; 
 
 Game.prototype.reset = function() {
-  this.background = new Background(this);
+  this.maps = new Maps(this);
+  this.map = this.maps.getMap(0);
   this.player = new Player(this);
+  this.player.setPosition(this.map.positionFrom(0));
   this.framesCounter = 0;
 };
 
 
 Game.prototype.drawAll = function() {
-  this.background.draw();
+  this.map.draw();
   this.player.draw();
 };
 

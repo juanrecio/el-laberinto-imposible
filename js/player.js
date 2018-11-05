@@ -1,10 +1,10 @@
 function Player(game) {
   this.game = game;
 
-  this.x = this.game.canvas.width / 2;
+  this.x = 0;
 
 
-  this.y = this.game.canvas.height / 2;
+  this.y = 0;
 
   this.img = new Image();
   this.img.src = 'img/character.png';
@@ -15,9 +15,12 @@ function Player(game) {
   this.img.xFrameIndex = 0;
   this.img.yFrameIndex = 0;
 
+  this.tileWidth=this.game.map.tileWidth;
+  this.tileHeight=this.game.map.tileHeight;
+
   // medidas de la imagen a representar en el canvas
-  this.w = 50;
-  this.h = 75;
+  this.w = this.game.map.tileWidth;
+  this.h = this.game.map.tileHeight*2;
 
   this.setListeners();
 }
@@ -46,6 +49,12 @@ Player.prototype.draw = function () {
 
 };
 
+
+Player.prototype.setPosition= function(position){
+  this.x = position[0]*this.tileWidth;
+  this.y = position[1]*this.tileHeight;
+}
+
 Player.prototype.setListeners = function () {
   document.onkeydown = function (event) {
     event.preventDefault();
@@ -53,19 +62,19 @@ Player.prototype.setListeners = function () {
     switch (key) {
       case TOP_KEY:
         this.img.yFrameIndex = 2;
-        this.y -= 10;
+        this.y -= this.tileHeight;
         break;
       case RIGHT_KEY:
         this.img.yFrameIndex = 1;
-        this.x += 10;
+        this.x += this.tileWidth;
         break;
       case DOWN_KEY:
         this.img.yFrameIndex = 0;
-        this.y += 10;
+        this.y += this.tileHeight;
         break;
       case LEFT_KEY:
         this.img.yFrameIndex = 3;
-        this.x -= 10;
+        this.x -= this.tileWidth;
         break;
     }
     this.animateImg();
