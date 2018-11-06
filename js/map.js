@@ -1,11 +1,10 @@
-function Map(game,imgSrc,xTiles,yTiles,path,landingPoints,escapePoints) {
+function Map(game,imgSrc,xTiles,yTiles,path,portalsPos) {
   this.game = game;
 
   this.img = new Image();
   this.img.src = imgSrc;
 
-  this.landingPoints=landingPoints;
-  this.escapePoints=escapePoints;
+  this.portals=portalsPos;
   this.matrix=[];
   this.x = 0;
   this.y = 0;
@@ -13,7 +12,7 @@ function Map(game,imgSrc,xTiles,yTiles,path,landingPoints,escapePoints) {
   this.yTiles=yTiles;
   this.tileWidth=this.game.canvas.width/this.xTiles;
   this.tileHeight=this.game.canvas.height/this.yTiles;
-  this.create(path,landingPoints,escapePoints);
+  this.create(path,portalsPos);
 }
 
 
@@ -24,10 +23,17 @@ Map.prototype.draw = function() {
 
 
 Map.prototype.positionFrom = function (previousBg){
-  return( this.landingPoints[previousBg]);
+  var position=null;
+  Object.keys(this.portals).forEach(function(portal){
+    if (this.portals[portal] === previousBg){
+      position=portal.split(',');
+    }
+  }.bind(this));
+  return(position);
 }
 
-Map.prototype.create = function (pathPos,landingPos,escapePos){
+Map.prototype.create = function (pathPos){
+  
   for (var i=0;i<this.xTiles;i++){
     this.matrix[i]=[];
     for (var j=0;j<this.yTiles;j++){
@@ -35,21 +41,23 @@ Map.prototype.create = function (pathPos,landingPos,escapePos){
     }
   }
 
-
+  
   pathPos.forEach(function(p){
     this.matrix[p[0]][p[1]]="path";
   }.bind(this));
-  
-  // landingPos.forEach(function(lp){
-  //   this.matrix[lp[0]][lp[1]]="lp";
-  // }.bind(this));
 
-  // escapePos.forEach(function(ep){
-  //   this.matrix[ep[0]][ep[1]]="ep";
-  // }.bind(this));
+  Object.keys(this.portals).forEach(function(portal){
+    var portalPosArray=portal.split(',');
+    this.matrix[portalPosArray[0]][portalPosArray[1]]="portal";
+  }.bind(this));
+
 }
 
 
 Map.prototype.getElementAt = function (x,y){
   return this.matrix[x][y];
+}
+
+Map.prototype.getDestination = function(portalX,portalY){
+  return this.portals[`${portalX},${portalY}`];
 }

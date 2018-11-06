@@ -12,11 +12,24 @@ function Maps(game) {
     [2, 7], [2, 8], [2, 9],
     [3, 6], [4, 6], [5, 6]
     ],
-    landingPoints: {
-      0: [2, 2]
-    },
-    escapePoints: {}
-  }];
+    portals: {
+      "2,2": 0,
+      "5,6" : 1
+    }
+  },
+  {
+    src: 'img/bg/test2.png',
+    xTiles: 8,
+    yTiles: 8,
+    path: [[2, 2], [3, 2], [4, 2], [5, 2],
+    [2, 3], [3, 3], [4, 3], [5, 3],
+    [2, 4], [3, 4], [4, 4], [5, 4]
+    ],
+    portals: {
+      "2,2":0
+    }
+  }
+  ];
   this.createMaps();
 
 }
@@ -25,8 +38,7 @@ function Maps(game) {
 Maps.prototype.createMaps = function () {
   this.mapsSrcs.forEach(function (bg) {
     this.maps.push(new Map(this.game, bg.src, bg.xTiles, bg.yTiles,
-      bg.path, bg.landingPoints, bg.escapePoints));
-
+      bg.path, bg.portals));
   }.bind(this));
 }
 

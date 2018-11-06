@@ -15,13 +15,8 @@ function Player(game) {
   this.img.xFrameIndex = 0;
   this.img.yFrameIndex = 0;
 
-  this.tileWidth = this.game.map.tileWidth;
-  this.tileHeight = this.game.map.tileHeight;
-
-  // medidas de la imagen a representar en el canvas
-  this.w = this.game.map.tileWidth;
-  this.h = this.game.map.tileHeight * 2;
-
+  
+  this.update();
   this.setListeners();
 }
 
@@ -31,6 +26,13 @@ var RIGHT_KEY = 39;
 var DOWN_KEY = 40;
 var SPACE = 32;
 
+Player.prototype.update = function (){
+  this.tileWidth = this.game.map.tileWidth;
+  this.tileHeight = this.game.map.tileHeight;
+  this.w = this.game.map.tileWidth;
+  this.h = this.game.map.tileHeight * 2;
+}
+
 Player.prototype.draw = function () {
   this.game.ctx.drawImage(
     this.img, //src
@@ -38,21 +40,18 @@ Player.prototype.draw = function () {
     this.img.yFrameIndex * Math.floor(this.img.height / this.img.yFrames),
     Math.floor(this.img.width / this.img.xFrames),
     Math.floor(this.img.height / this.img.yFrames),
-    this.x*this.tileWidth,
-    (this.y-1)*this.tileHeight,
+    this.x * this.tileWidth,
+    (this.y - 1) * this.tileHeight,
     this.w,
     this.h
   );
-
-
   // this.animateImg();
-
 };
 
 
 Player.prototype.setPosition = function (position) {
   this.x = position[0];
-  this.y = (position[1]);
+  this.y = position[1];
 }
 
 Player.prototype.setListeners = function () {
@@ -79,12 +78,19 @@ Player.prototype.setListeners = function () {
         newXPos--;
         break;
     }
-   
-    if (this.game.map.getElementAt(newXPos,newYPos)==="path"){
-      this.x=newXPos;
-      this.y=newYPos;
-    }
 
+    console.log(`${this.x},${this.y}->${newXPos},${newYPos}`);
+    switch (this.game.map.getElementAt(newXPos, newYPos)) {
+      case "portal":
+        this.x = newXPos;
+        this.y = newYPos;
+        this.game.changeToMap(this.game.map.getDestination(newXPos,newYPos));
+        break;
+      case "path":
+        this.x = newXPos;
+        this.y = newYPos;
+        console.log(`${newXPos},${newYPos}`);
+    }
     this.animateImg();
 
   }.bind(this);
