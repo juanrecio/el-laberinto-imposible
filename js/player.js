@@ -79,7 +79,7 @@ Player.prototype.setListeners = function () {
         break;
     }
 
-    console.log(`${this.x},${this.y}->${newXPos},${newYPos}`);
+    //console.log(`${this.x},${this.y}->${newXPos},${newYPos}`);
     switch (this.game.map.getElementAt(newXPos, newYPos)) {
       case "portal":
         this.x = newXPos;
@@ -89,7 +89,6 @@ Player.prototype.setListeners = function () {
       case "path":
         this.x = newXPos;
         this.y = newYPos;
-        console.log(`${newXPos},${newYPos}`);
     }
     this.animateImg();
 
