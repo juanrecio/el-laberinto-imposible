@@ -15,7 +15,7 @@ function Player(game) {
   this.img.xFrameIndex = 0;
   this.img.yFrameIndex = 0;
 
-  
+
   this.update();
   this.setListeners();
 }
@@ -26,7 +26,7 @@ var RIGHT_KEY = 39;
 var DOWN_KEY = 40;
 var SPACE = 32;
 
-Player.prototype.update = function (){
+Player.prototype.update = function () {
   this.tileWidth = this.game.map.tileWidth;
   this.tileHeight = this.game.map.tileHeight;
   this.w = this.game.map.tileWidth;
@@ -79,14 +79,15 @@ Player.prototype.setListeners = function () {
         break;
     }
 
-    //console.log(`${this.x},${this.y}->${newXPos},${newYPos}`);
+    console.log(`${this.x},${this.y}->${newXPos},${newYPos}`);
     switch (this.game.map.getElementAt(newXPos, newYPos)) {
       case "portal":
         this.x = newXPos;
         this.y = newYPos;
-        this.game.changeToMap(this.game.map.getDestination(newXPos,newYPos));
+        this.game.changeToMap(this.game.map.getDestination(newXPos, newYPos));
         break;
       case "path":
+      //default:
         this.x = newXPos;
         this.y = newYPos;
     }

@@ -1,4 +1,4 @@
-function Map(game,imgSrc,xTiles,yTiles,path,portalsPos) {
+function Map(game,imgSrc,xTiles,yTiles,path,portalsPos,obstacles) {
   this.game = game;
 
   this.img = new Image();
@@ -7,6 +7,10 @@ function Map(game,imgSrc,xTiles,yTiles,path,portalsPos) {
   this.portalImg = new Image();
   this.portalImg.src = "img/mapItems/portal_strip4.png"
   this.portalPos=portalsPos;
+
+  this.obstacleImg= new Image();
+  this.obstaclesPositions=obstacles;
+
   this.matrix=[];
   this.x = 0;
   this.y = 0;
@@ -15,6 +19,8 @@ function Map(game,imgSrc,xTiles,yTiles,path,portalsPos) {
   this.tileWidth=this.game.canvas.width/this.xTiles;
   this.tileHeight=this.game.canvas.height/this.yTiles;
   this.create(path,portalsPos);
+
+
 }
 
 
@@ -39,7 +45,7 @@ Map.prototype.create = function (pathPos){
   for (var i=0;i<this.xTiles;i++){
     this.matrix[i]=[];
     for (var j=0;j<this.yTiles;j++){
-      this.matrix[i][j]=null;
+      this.matrix[i][j]=null; 
     }
   }
 
@@ -83,7 +89,8 @@ Map.prototype.drawPortals = function (){
       this.tileWidth,
       this.tileHeight
     );
-    debugger
   }.bind(this))
 }
 
+Map.prototype.updateObstacles= function(){
+}

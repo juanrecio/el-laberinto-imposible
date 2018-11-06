@@ -31,7 +31,7 @@ Game.prototype.reset = function () {
   this.currentMapInd=0;
   this.map = this.maps.getMap(0);
   this.player = new Player(this);
-  this.player.setPosition(this.map.positionFrom(0));
+  this.player.setPosition([2,2]);
   this.framesCounter = 0;
 };
 
