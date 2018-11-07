@@ -48,3 +48,13 @@ Game.prototype.changeToMap = function (mapIndex) {
   this.player.setPosition(this.map.positionFrom(this.currentMapInd));
   this.currentMapInd=mapIndex;
 };
+
+Game.prototype.openHouse= function(hasKey){
+  if (hasKey){
+    alert("has ganado");
+  }
+  else{
+    this.player.y++;
+    alert("¡Necesitas la llave!");
+  }
+}

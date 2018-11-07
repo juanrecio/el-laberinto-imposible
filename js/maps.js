@@ -1,7 +1,6 @@
 function Maps(game) {
   this.game = game;
   this.maps = [];
-
   this.mapsSrcs = [{
     src: 'img/bg/bg0.png',
     xTiles: 20,
@@ -21,11 +20,20 @@ function Maps(game) {
     portals: {
       "17,14": 1
     },
+    items:{
+      house:{
+        posX:3,
+        posY:13,
+        taken:false,
+        src:"img/mapItems/nothing.png",
+      }
+    },
     obstacles: [
       [
         [0, 8], [1, 8], [2, 8], [3, 8], [4, 8]
       ]]
   },
+ 
   {
     src: 'img/bg/bg1.png',
     xTiles: 8,
@@ -57,6 +65,15 @@ function Maps(game) {
       "13,3": 1,
       "4,10": 3,
       "10,10": 4
+    },
+    items:{
+      key:{
+        posX:13,
+        posY:9,
+        taken:false,
+        src:"img/mapItems/key.png",
+      },
+
     },
     obstacles: []
   },
@@ -109,7 +126,7 @@ function Maps(game) {
 Maps.prototype.createMaps = function () {
   this.mapsSrcs.forEach(function (bg) {
     this.maps.push(new Map(this.game, bg.src, bg.xTiles, bg.yTiles,
-      bg.path, bg.portals));
+      bg.path, bg.portals,bg.obstacles,bg.items));
   }.bind(this));
 }
 

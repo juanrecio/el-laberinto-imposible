@@ -15,6 +15,7 @@ function Player(game) {
   this.img.xFrameIndex = 0;
   this.img.yFrameIndex = 0;
 
+  this.hasKey=false;
 
   this.update();
   this.setListeners();
@@ -45,6 +46,7 @@ Player.prototype.draw = function () {
     this.w,
     this.h
   );
+  
   // this.animateImg();
 };
 
@@ -91,6 +93,14 @@ Player.prototype.setListeners = function () {
         this.x = newXPos;
         this.y = newYPos;
         break;
+      case null:
+        break;
+      default:
+        itemName=this.game.map.getElementAt(newXPos, newYPos)
+        this.x= newXPos;
+        this.y=newYPos;
+        delete this.game.map.items[itemName];
+        this.getItem(this.game.map.getElementAt(newXPos, newYPos));
     }
     this.animateImg();
 
@@ -111,3 +121,17 @@ Player.prototype.animateImg = function () {
   if (this.img.xFrameIndex > 3) this.img.xFrameIndex = 0;
   //}
 };
+
+
+Player.prototype.getItem=function(item){
+  switch(item){
+    case 'key':
+      this.hasKey=true;
+      break;
+    case 'house':
+      this.game.openHouse(this.hasKey);
+      break;
+      }
+  };
+
+
