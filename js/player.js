@@ -21,6 +21,11 @@ function Player(game) {
   this.setListeners();
 }
 
+//todo: consider adding a KeyboardKeys object with these configs
+// var KeyboardKeys = {
+//   left: 37
+// }
+
 var LEFT_KEY = 37;
 var TOP_KEY = 38;
 var RIGHT_KEY = 39;
@@ -46,6 +51,11 @@ Player.prototype.draw = function () {
     this.w,
     this.h
   );
+
+  //todo: sacar esto de draw:
+  if (this.game.map.getElementAt(this.x,this.y)==='obstacle'){
+    this.game.reset();
+  }
   
   // this.animateImg();
 };
@@ -57,6 +67,7 @@ Player.prototype.setPosition = function (position) {
 }
 
 Player.prototype.setListeners = function () {
+  //todo: consider adding a KeyboardManager class
   document.onkeydown = function (event) {
     event.preventDefault();
     var key = event.keyCode;
@@ -75,12 +86,15 @@ Player.prototype.setListeners = function () {
         this.img.yFrameIndex = 0;
         newYPos++;
         break;
+
+        //todo: please use the KeyboardConfig object
       case LEFT_KEY:
         this.img.yFrameIndex = 3;
         newXPos--;
         break;
     }
 
+      //todo: consider adding an update method to the Player class (x,y)
     console.log(`${this.x},${this.y}->${newXPos},${newYPos}`);
     switch (this.game.map.getElementAt(newXPos, newYPos)) {
       case "portal":
@@ -93,6 +107,8 @@ Player.prototype.setListeners = function () {
         this.x = newXPos;
         this.y = newYPos;
         break;
+      case "obstacle":
+        this.game.reset();
       case null:
         break;
       default:

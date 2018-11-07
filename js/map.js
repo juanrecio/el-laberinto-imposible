@@ -8,8 +8,6 @@ function Map(game, imgSrc, xTiles, yTiles, path, portalsPos, obstacles, items) {
   this.portalImg.src = "img/mapItems/portal_strip4.png"
   this.portalPos = portalsPos;
 
-  this.obstacleImg = new Image();
-  this.obstaclesPositions = obstacles;
 
   this.matrix = [];
   this.x = 0;
@@ -19,7 +17,12 @@ function Map(game, imgSrc, xTiles, yTiles, path, portalsPos, obstacles, items) {
   this.tileWidth = this.game.canvas.width / this.xTiles;
   this.tileHeight = this.game.canvas.height / this.yTiles;
 
-  
+
+  this.obstacles = [];
+  this.createObstacles(obstacles);
+  this.obstaclesSpeed=9;
+  this.obstaclesSpeedCounter=0;
+
   this.create(path, portalsPos);
   this.items = {};
   this.addItems(items);
@@ -30,6 +33,7 @@ Map.prototype.draw = function () {
   this.game.ctx.drawImage(this.img, this.x, this.y, this.game.canvas.width, this.game.canvas.height);
   this.drawPortals();
   this.drawItems();
+  this.updateObstacles();
 };
 
 
@@ -64,17 +68,18 @@ Map.prototype.create = function (pathPos) {
 
 }
 
-Map.prototype.addItems = function (itemsObject={}) {
+//todo: consider adding an Item class
+Map.prototype.addItems = function (itemsObject = {}) {
   Object.keys(itemsObject).forEach(function (itemName) {
     var item = itemsObject[itemName];
     if (!item.taken) {
       this.matrix[item.posX][item.posY] = itemName;
-      newItem={};
+      newItem = {};
       var img = new Image();
       img.src = item.src;
-      newItem['img']=img;
-      newItem['posX']=item.posX;
-      newItem['posY']=item.posY;
+      newItem['img'] = img;
+      newItem['posX'] = item.posX;
+      newItem['posY'] = item.posY;
       this.items[itemName] = newItem;
     }
   }.bind(this));
@@ -85,10 +90,14 @@ Map.prototype.getElementAt = function (x, y) {
   return this.matrix[x][y];
 }
 
+Map.prototype.setElementAt = function (element, x, y) {
+  this.matrix[x][y] = element;
+}
+
 Map.prototype.getDestination = function (portalX, portalY) {
   return this.portalPos[`${portalX},${portalY}`];
 }
-
+//todo: consider adding a Portal class to manage this kind of things
 Map.prototype.drawPortals = function () {
   var frameIndex;
   var frames = 4;
@@ -111,13 +120,26 @@ Map.prototype.drawPortals = function () {
   }.bind(this))
 }
 
+Map.prototype.createObstacles = function (obstacles) {
+  obstacles.forEach(function (obstacle) {
+    this.obstacles.push(new Obstacle(this.game, obstacle,this.tileWidth,this.tileHeight));
+  }.bind(this))
+};
+
 Map.prototype.updateObstacles = function () {
-  
+  this.obstacles.forEach(function (obstacle) {
+
+  if (this.obstaclesSpeedCounter++ % this.obstaclesSpeed===0){
+    obstacle.move();}
+    obstacle.draw();
+  }.bind(this)
+  )
+
 }
 
-Map.prototype.drawItems=function (){
-  Object.keys(this.items).forEach(function(itemName){
-    var item=this.items[itemName];
-    this.game.ctx.drawImage(item.img,item.posX*this.tileWidth,item.posY*this.tileHeight,this.tileWidth,this.tileHeight);
+Map.prototype.drawItems = function () {
+  Object.keys(this.items).forEach(function (itemName) {
+    var item = this.items[itemName];
+    this.game.ctx.drawImage(item.img, item.posX * this.tileWidth, item.posY * this.tileHeight, this.tileWidth, this.tileHeight);
   }.bind(this));
 }

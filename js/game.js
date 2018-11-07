@@ -27,7 +27,7 @@ Game.prototype.clear = function () {
 };
 
 Game.prototype.reset = function () {
-  this.maps = new Maps(this);
+  this.maps = new Maps(this); 
   this.currentMapInd=0;
   this.map = this.maps.getMap(0);
   this.player = new Player(this);
@@ -52,9 +52,10 @@ Game.prototype.changeToMap = function (mapIndex) {
 Game.prototype.openHouse= function(hasKey){
   if (hasKey){
     alert("has ganado");
+    this.reset();
   }
   else{
     this.player.y++;
-    alert("¡Necesitas la llave!");
+    alert("Necesitas la llave!");
   }
 }
