@@ -90,6 +90,7 @@ Player.prototype.setListeners = function () {
       //default:
         this.x = newXPos;
         this.y = newYPos;
+        break;
     }
     this.animateImg();
 
