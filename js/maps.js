@@ -118,19 +118,23 @@ function Maps(game) {
     obstacles: []
   }
   ];
-  this.createMaps();
 
 }
 
-
-Maps.prototype.createMaps = function () {
-  this.mapsSrcs.forEach(function (bg) {
-    this.maps.push(new Map(this.game, bg.src, bg.xTiles, bg.yTiles,
-      bg.path, bg.portals,bg.obstacles,bg.items));
-  }.bind(this));
-}
 
 
 Maps.prototype.getMap = function (index) {
-  return this.maps[index];
+  var map= this.mapsSrcs[index];
+  return new Map(this.game, map.src, map.xTiles, map.yTiles,
+    map.path, map.portals,map.obstacles,map.items);
+}
+
+
+Maps.prototype.getItem=function(itemName){
+  var itemMap = this.mapsSrcs.find(function(map){
+    return (map.hasOwnProperty('items') && map.items.hasOwnProperty(itemName))
+  });
+  if (itemMap !== undefined){
+    itemMap.items[itemName].taken=true;
+  }
 }

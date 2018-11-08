@@ -75,8 +75,6 @@ Player.prototype.draw = function () {
 Player.prototype.setPosition = function (position) {
   this.x = position[0];
   this.y = position[1];
-  if(typeof this.x == "string")
-    debugger;
 }
 
 Player.prototype.do = function (action) {
@@ -132,6 +130,7 @@ Player.prototype.update = function (posX, posY) {
       this.setPosition([posX, posY]);
       delete this.game.map.items[itemName];
       this.getItem(this.game.map.getElementAt(posX, posY));
+      this.game.maps.getItem(itemName);
   }
   this.animateImg();
 };

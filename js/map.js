@@ -42,9 +42,10 @@ Map.prototype.positionFrom = function (previousBg) {
   Object.keys(this.portalPos).forEach(function (portal) {
     if (this.portalPos[portal] === previousBg) {
       position = portal.split(',');
+      position[0]=parseInt(position[0]);
+      position[1]=parseInt(position[1]);
     }
-    position[0]=parseInt(position[0]);
-    position[1]=parseInt(position[1]);
+    
   }.bind(this));
   return (position);
 }
@@ -88,9 +89,6 @@ Map.prototype.addItems = function (itemsObject = {}) {
 
 
 Map.prototype.getElementAt = function (x, y) {
-  if (this.game.currentMapInd===1){
-  }
-  console.log(typeof x, typeof y)
   return this.matrix[x][y];
 }
 
