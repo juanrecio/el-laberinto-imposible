@@ -34,8 +34,7 @@ EventsManager.prototype.setNormalPlayerListeners = function (player) {
         action = 'down';
         break;
     }
-    //console.log(`${this.x},${this.y}->${newXPos},${newYPos}`);
-    player.do(action);
+    action !== undefined? player.do(action):0;
 
   }.bind(this);
   document.onkeyup = function (event) {

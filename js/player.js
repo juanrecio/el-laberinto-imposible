@@ -63,7 +63,7 @@ Player.prototype.draw = function () {
     this.h
   );
 
-  //todo: sacar esto de draw:
+  //todo: sacar esto de draw:0
   if (this.game.map.getElementAt(this.x, this.y) === 'obstacle') {
     this.game.reset();
   }
@@ -75,16 +75,18 @@ Player.prototype.draw = function () {
 Player.prototype.setPosition = function (position) {
   this.x = position[0];
   this.y = position[1];
+  if(typeof this.x == "string")
+    debugger;
 }
 
-Player.prototype.do=function(action){
-  var newX=this.x;
-  var newY=this.y;
-  var currentAction=this.actions[action];
-  currentAction.hasOwnProperty('yFrameInd')?this.img.yFrameIndex=currentAction.yFrameInd:0;
-  currentAction.hasOwnProperty('yIncrement')?newY+=currentAction.yIncrement:0;
-  currentAction.hasOwnProperty('xIncrement')?newX+=currentAction.xIncrement:0;
-  this.update(newX,newY);
+Player.prototype.do = function (action) {
+  var newX = this.x;
+  var newY = this.y;
+  var currentAction = this.actions[action];
+  currentAction.hasOwnProperty('yFrameInd') ? this.img.yFrameIndex = currentAction.yFrameInd : 0;
+  currentAction.hasOwnProperty('yIncrement') ? newY += currentAction.yIncrement : 0;
+  currentAction.hasOwnProperty('xIncrement') ? newX += currentAction.xIncrement : 0;
+  (action!=='stop'?this.update(newX, newY):0);
 }
 
 Player.prototype.animateImg = function () {
@@ -113,6 +115,7 @@ Player.prototype.getItem = function (item) {
 Player.prototype.update = function (posX, posY) {
   switch (this.game.map.getElementAt(posX, posY)) {
     case "portal":
+      // this.setPosition([posX, posY]);
       this.game.changeToMap(this.game.map.getDestination(posX, posY));
       break;
     case "path":
@@ -121,6 +124,7 @@ Player.prototype.update = function (posX, posY) {
       break;
     case "obstacle":
       this.game.reset();
+      break;
     case null:
       break;
     default:

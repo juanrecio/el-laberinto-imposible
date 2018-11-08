@@ -47,6 +47,7 @@ Game.prototype.changeToMap = function (mapIndex) {
   this.player.updateSize();
   this.player.setPosition(this.map.positionFrom(this.currentMapInd));
   this.currentMapInd=mapIndex;
+  
 };
 
 Game.prototype.openHouse= function(hasKey){

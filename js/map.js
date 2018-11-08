@@ -43,12 +43,13 @@ Map.prototype.positionFrom = function (previousBg) {
     if (this.portalPos[portal] === previousBg) {
       position = portal.split(',');
     }
+    position[0]=parseInt(position[0]);
+    position[1]=parseInt(position[1]);
   }.bind(this));
   return (position);
 }
 
 Map.prototype.create = function (pathPos) {
-
   for (var i = 0; i < this.xTiles; i++) {
     this.matrix[i] = [];
     for (var j = 0; j < this.yTiles; j++) {
@@ -87,6 +88,9 @@ Map.prototype.addItems = function (itemsObject = {}) {
 
 
 Map.prototype.getElementAt = function (x, y) {
+  if (this.game.currentMapInd===1){
+  }
+  console.log(typeof x, typeof y)
   return this.matrix[x][y];
 }
 
