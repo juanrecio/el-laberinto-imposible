@@ -15,24 +15,35 @@ function Player(game) {
   this.img.xFrameIndex = 0;
   this.img.yFrameIndex = 0;
 
-  this.hasKey=false;
+  this.hasKey = false;
 
-  this.update();
-  this.setListeners();
+  this.actions = {
+    top: {
+      yFrameInd: 2,
+      yIncrement: -1
+    },
+    right: {
+      yFrameInd: 1,
+      xIncrement: 1
+    },
+    down: {
+      yFrameInd: 0,
+      yIncrement: 1
+    },
+    left: {
+      yFrameInd: 3,
+      xIncrement: -1
+    },
+    stop: {
+      yFrameInd: 0
+    }
+  }
+
+  this.updateSize();
 }
 
-//todo: consider adding a KeyboardKeys object with these configs
-// var KeyboardKeys = {
-//   left: 37
-// }
 
-var LEFT_KEY = 37;
-var TOP_KEY = 38;
-var RIGHT_KEY = 39;
-var DOWN_KEY = 40;
-var SPACE = 32;
-
-Player.prototype.update = function () {
+Player.prototype.updateSize = function () {
   this.tileWidth = this.game.map.tileWidth;
   this.tileHeight = this.game.map.tileHeight;
   this.w = this.game.map.tileWidth;
@@ -53,10 +64,10 @@ Player.prototype.draw = function () {
   );
 
   //todo: sacar esto de draw:
-  if (this.game.map.getElementAt(this.x,this.y)==='obstacle'){
+  if (this.game.map.getElementAt(this.x, this.y) === 'obstacle') {
     this.game.reset();
   }
-  
+
   // this.animateImg();
 };
 
@@ -66,67 +77,15 @@ Player.prototype.setPosition = function (position) {
   this.y = position[1];
 }
 
-Player.prototype.setListeners = function () {
-  //todo: consider adding a KeyboardManager class
-  document.onkeydown = function (event) {
-    event.preventDefault();
-    var key = event.keyCode;
-    var newXPos = this.x;
-    var newYPos = this.y;
-    switch (key) {
-      case TOP_KEY:
-        this.img.yFrameIndex = 2;
-        newYPos--;
-        break;
-      case RIGHT_KEY:
-        this.img.yFrameIndex = 1;
-        newXPos++;
-        break;
-      case DOWN_KEY:
-        this.img.yFrameIndex = 0;
-        newYPos++;
-        break;
-
-        //todo: please use the KeyboardConfig object
-      case LEFT_KEY:
-        this.img.yFrameIndex = 3;
-        newXPos--;
-        break;
-    }
-
-      //todo: consider adding an update method to the Player class (x,y)
-    console.log(`${this.x},${this.y}->${newXPos},${newYPos}`);
-    switch (this.game.map.getElementAt(newXPos, newYPos)) {
-      case "portal":
-        this.x = newXPos;
-        this.y = newYPos;
-        this.game.changeToMap(this.game.map.getDestination(newXPos, newYPos));
-        break;
-      case "path":
-      //default:
-        this.x = newXPos;
-        this.y = newYPos;
-        break;
-      case "obstacle":
-        this.game.reset();
-      case null:
-        break;
-      default:
-        itemName=this.game.map.getElementAt(newXPos, newYPos)
-        this.x= newXPos;
-        this.y=newYPos;
-        delete this.game.map.items[itemName];
-        this.getItem(this.game.map.getElementAt(newXPos, newYPos));
-    }
-    this.animateImg();
-
-  }.bind(this);
-  document.onkeyup = function (event) {
-    event.preventDefault();
-    this.img.yFrameIndex = 0;
-  }.bind(this);
+Player.prototype.do=function(action){
+  var newX=this.x;
+  var newY=this.y;
+  var currentAction=this.actions[action];
+  currentAction.hasOwnProperty('yFrameInd')?this.img.yFrameIndex=currentAction.yFrameInd:0;
+  currentAction.hasOwnProperty('yIncrement')?newY+=currentAction.yIncrement:0;
+  currentAction.hasOwnProperty('xIncrement')?newX+=currentAction.xIncrement:0;
+  this.update(newX,newY);
 }
-
 
 Player.prototype.animateImg = function () {
   // se va cambiando el frame. Cuanto mayor es el módulo, mas lento se mueve el personaje
@@ -139,15 +98,38 @@ Player.prototype.animateImg = function () {
 };
 
 
-Player.prototype.getItem=function(item){
-  switch(item){
+Player.prototype.getItem = function (item) {
+  switch (item) {
     case 'key':
-      this.hasKey=true;
+      this.hasKey = true;
       break;
     case 'house':
       this.game.openHouse(this.hasKey);
       break;
-      }
-  };
+  }
+};
+
+
+Player.prototype.update = function (posX, posY) {
+  switch (this.game.map.getElementAt(posX, posY)) {
+    case "portal":
+      this.game.changeToMap(this.game.map.getDestination(posX, posY));
+      break;
+    case "path":
+      //default:
+      this.setPosition([posX, posY]);
+      break;
+    case "obstacle":
+      this.game.reset();
+    case null:
+      break;
+    default:
+      itemName = this.game.map.getElementAt(posX, posY)
+      this.setPosition([posX, posY]);
+      delete this.game.map.items[itemName];
+      this.getItem(this.game.map.getElementAt(posX, posY));
+  }
+  this.animateImg();
+};
 
 

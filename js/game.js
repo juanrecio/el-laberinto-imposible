@@ -3,7 +3,6 @@ function Game(canvadId) {
   this.ctx = this.canvas.getContext("2d");
   this.fps = 60;
 
-
   this.reset();
 }
 
@@ -32,6 +31,7 @@ Game.prototype.reset = function () {
   this.map = this.maps.getMap(0);
   this.player = new Player(this);
   this.player.setPosition([2,2]);
+  this.eventsManager=new EventsManager(this);
   this.framesCounter = 0;
 };
 
@@ -44,7 +44,7 @@ Game.prototype.drawAll = function () {
 
 Game.prototype.changeToMap = function (mapIndex) {
   this.map = this.maps.getMap(mapIndex);
-  this.player.update();
+  this.player.updateSize();
   this.player.setPosition(this.map.positionFrom(this.currentMapInd));
   this.currentMapInd=mapIndex;
 };
