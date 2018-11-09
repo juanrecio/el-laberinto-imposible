@@ -15,7 +15,7 @@ Game.prototype.start = function () {
     if (this.framesCounter > 1000) {
       this.framesCounter = 0;
     }
-
+    this.moveAll();
     this.drawAll();
   }.bind(this), 1000 / this.fps);
 };
@@ -40,6 +40,11 @@ Game.prototype.drawAll = function () {
   this.map.draw();
   this.player.draw();
 };
+
+Game.prototype.moveAll = function(){
+  this.map.move();
+  this.player.move();
+}
 
 Game.prototype.changeToMap = function (mapIndex) {
   this.map = this.maps.getMap(mapIndex);

@@ -33,9 +33,12 @@ Map.prototype.draw = function () {
   this.game.ctx.drawImage(this.img, this.x, this.y, this.game.canvas.width, this.game.canvas.height);
   this.drawPortals();
   this.drawItems();
-  this.updateObstacles();
+  this.drawObstacles();
 };
 
+Map.prototype.move = function(){
+  this.moveObstacles();
+}
 
 Map.prototype.positionFrom = function (previousBg) {
   var position = null;
@@ -128,15 +131,21 @@ Map.prototype.createObstacles = function (obstacles) {
   }.bind(this))
 };
 
-Map.prototype.updateObstacles = function () {
+Map.prototype.moveObstacles = function () {
   this.obstacles.forEach(function (obstacle) {
 
   if (this.obstaclesSpeedCounter++ % this.obstaclesSpeed===0){
     obstacle.move();}
-    obstacle.draw();
   }.bind(this)
   )
 
+}
+
+Map.prototype.drawObstacles = function (){
+  this.obstacles.forEach(function (obstacle) {
+      obstacle.draw();
+    }.bind(this)
+    )
 }
 
 Map.prototype.drawItems = function () {

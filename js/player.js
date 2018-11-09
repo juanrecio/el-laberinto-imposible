@@ -43,16 +43,20 @@ Player.prototype.draw = function () {
     this.h
   );
 
-  //todo: sacar esto de draw:0
-  if (this.game.map.getElementAt(this.x, this.y) === 'obstacle') {
-    this.game.reset();
-  }
+  
   
 
 
   // this.animateImg();
 };
 
+
+Player.prototype.move = function (){
+//todo: sacar esto de draw:0
+if (this.game.map.getElementAt(this.x, this.y) === 'obstacle') {
+  this.game.reset();
+}
+}
 
 Player.prototype.setPosition = function (position) {
   this.x = position[0];
@@ -63,10 +67,10 @@ Player.prototype.do = function (action) {
   var newX = this.x;
   var newY = this.y;
   var currentAction = this.actions[action];
-  currentAction.hasOwnProperty('yFrameInd') ? this.img.yFrameIndex = currentAction.yFrameInd : 0;
-  currentAction.hasOwnProperty('yIncrement') ? newY += currentAction.yIncrement : 0;
-  currentAction.hasOwnProperty('xIncrement') ? newX += currentAction.xIncrement : 0;
-  (action !== 'stop' ? this.update(newX, newY) : 0);
+  if (currentAction.hasOwnProperty('yFrameInd')) this.img.yFrameIndex = currentAction.yFrameInd;
+  if (currentAction.hasOwnProperty('yIncrement') )newY += currentAction.yIncrement;
+  if (currentAction.hasOwnProperty('xIncrement')) newX += currentAction.xIncrement;
+  if ((action !== 'stop'))this.update(newX, newY);
 }
 
 Player.prototype.animateImg = function () {
