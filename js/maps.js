@@ -26,6 +26,12 @@ function Maps(game) {
         posY:13,
         taken:false,
         src:"img/mapItems/nothing.png",
+      },
+      continuousItem:{
+        posX:16,
+        posY:6,
+        taken:false,
+        src:"img/mapItems/nothing.png",
       }
     },
     obstacles: [

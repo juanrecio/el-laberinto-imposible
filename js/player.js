@@ -17,6 +17,10 @@ function Player(game) {
 
   this.hasKey = false;
 
+  this.continuousMovement = false;
+  this.continuosSpeed = 5;
+  this.currentAction = 'stop';
+
   this.setNormalActions();
 
   this.updateSize();
@@ -43,20 +47,24 @@ Player.prototype.draw = function () {
     this.h
   );
 
-  
-  
+
+
 
 
   // this.animateImg();
 };
 
 
-Player.prototype.move = function (){
-//todo: sacar esto de draw:0
-if (this.game.map.getElementAt(this.x, this.y) === 'obstacle') {
-  this.game.reset();
-}
-}
+Player.prototype.move = function () {
+  //todo: sacar esto de draw:0
+  if (this.game.map.getElementAt(this.x, this.y) === 'obstacle') {
+    this.game.reset();}
+
+    if (this.continuousMovement && this.game.framesCounter%5===0) {
+      this.do(this.currentAction);
+    }
+  }
+
 
 Player.prototype.setPosition = function (position) {
   this.x = position[0];
@@ -66,11 +74,30 @@ Player.prototype.setPosition = function (position) {
 Player.prototype.do = function (action) {
   var newX = this.x;
   var newY = this.y;
-  var currentAction = this.actions[action];
-  if (currentAction.hasOwnProperty('yFrameInd')) this.img.yFrameIndex = currentAction.yFrameInd;
-  if (currentAction.hasOwnProperty('yIncrement') )newY += currentAction.yIncrement;
-  if (currentAction.hasOwnProperty('xIncrement')) newX += currentAction.xIncrement;
-  if ((action !== 'stop'))this.update(newX, newY);
+  var presentAction;
+  if (this.continuousMovement) {
+    if (action === 'stop') return 0;
+    if (action === 'stopC') {
+      action = 'stop';
+      presentAction = this.actions['stop'];
+    }
+    else{
+      presentAction= this.actions[action];
+    }
+  }
+  else {
+    presentAction = this.actions[action];
+    
+  }
+  
+  if (presentAction.hasOwnProperty('yFrameInd')) this.img.yFrameIndex = presentAction.yFrameInd;
+  if (presentAction.hasOwnProperty('yIncrement')) newY += presentAction.yIncrement;
+  if (presentAction.hasOwnProperty('xIncrement')) newX += presentAction.xIncrement;
+  if ((action !== 'stop')) {
+    if (this.continuousMovement && presentAction !== 'stop') this.currentAction = action;
+    this.update(newX, newY);
+  }
+  
 }
 
 Player.prototype.animateImg = function () {
@@ -92,6 +119,8 @@ Player.prototype.getItem = function (item) {
     case 'house':
       this.game.openHouse();
       break;
+    case 'continuousItem':
+      this.setContinuousMovement(true);
   }
   if (item !== 'house') {
     delete this.game.map.items[item];
@@ -105,6 +134,7 @@ Player.prototype.update = function (posX, posY) {
     case "portal":
       // this.setPosition([posX, posY]);
       this.game.changeToMap(this.game.map.getDestination(posX, posY));
+      if (this.continuousMovement) this.currentAction="stop";
       break;
     case "path":
       //default:
@@ -114,6 +144,7 @@ Player.prototype.update = function (posX, posY) {
       this.game.reset();
       break;
     case null:
+      if (this.continuousMovement) this.reverseDirections();
       break;
     default:
       itemName = this.game.map.getElementAt(posX, posY);
@@ -146,13 +177,26 @@ Player.prototype.setNormalActions = function () {
       yFrameInd: 0
     }
   }
+};
+
+Player.prototype.reverseDirections = function () {
+  var newAction;
+  switch (this.currentAction) {
+    case "left":
+      newAction = "right";
+      break;
+    case "right":
+      newAction = "left";
+      break;
+    case "top":
+      newAction = "down";
+      break;
+    case "down":
+      newAction = "top";
+      break;
+  }
+  this.currentAction=newAction;
 }
-
-// Player.prototype.setDoAction(continuos)
-// // Player.prototype.setLeftRightChangedActions = function () {
-// //   var tempAction = this.actions.right;
-// //   this.actions.right=this.actions.left;
-// //   this.actions.left=tempAction;
-// // }
-
-
+Player.prototype.setContinuousMovement = function (continuous) {
+    this.continuousMovement = continuous;
+  } 
