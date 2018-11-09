@@ -1,0 +1,16 @@
+*{
+  margin:0;
+  padding: 0;
+}
+
+
+#content{
+  width:100vw;
+  display:flex;
+  justify-content: center;
+  
+  background-image:url("../img/fondo.png");
+  background-size: cover; 
+}
+
+

@@ -17,27 +17,7 @@ function Player(game) {
 
   this.hasKey = false;
 
-  this.actions = {
-    top: {
-      yFrameInd: 2,
-      yIncrement: -1
-    },
-    right: {
-      yFrameInd: 1,
-      xIncrement: 1
-    },
-    down: {
-      yFrameInd: 0,
-      yIncrement: 1
-    },
-    left: {
-      yFrameInd: 3,
-      xIncrement: -1
-    },
-    stop: {
-      yFrameInd: 0
-    }
-  }
+  this.setNormalActions();
 
   this.updateSize();
 }
@@ -67,6 +47,8 @@ Player.prototype.draw = function () {
   if (this.game.map.getElementAt(this.x, this.y) === 'obstacle') {
     this.game.reset();
   }
+  
+
 
   // this.animateImg();
 };
@@ -84,7 +66,7 @@ Player.prototype.do = function (action) {
   currentAction.hasOwnProperty('yFrameInd') ? this.img.yFrameIndex = currentAction.yFrameInd : 0;
   currentAction.hasOwnProperty('yIncrement') ? newY += currentAction.yIncrement : 0;
   currentAction.hasOwnProperty('xIncrement') ? newX += currentAction.xIncrement : 0;
-  (action!=='stop'?this.update(newX, newY):0);
+  (action !== 'stop' ? this.update(newX, newY) : 0);
 }
 
 Player.prototype.animateImg = function () {
@@ -104,8 +86,12 @@ Player.prototype.getItem = function (item) {
       this.hasKey = true;
       break;
     case 'house':
-      this.game.openHouse(this.hasKey);
+      this.game.openHouse();
       break;
+  }
+  if (item !== 'house') {
+    delete this.game.map.items[item];
+    this.game.maps.getItem(item);
   }
 };
 
@@ -126,13 +112,43 @@ Player.prototype.update = function (posX, posY) {
     case null:
       break;
     default:
-      itemName = this.game.map.getElementAt(posX, posY)
+      itemName = this.game.map.getElementAt(posX, posY);
       this.setPosition([posX, posY]);
-      delete this.game.map.items[itemName];
-      this.getItem(this.game.map.getElementAt(posX, posY));
-      this.game.maps.getItem(itemName);
+      this.getItem(itemName);
+
   }
   this.animateImg();
 };
+
+Player.prototype.setNormalActions = function () {
+  this.actions = {
+    top: {
+      yFrameInd: 2,
+      yIncrement: -1
+    },
+    right: {
+      yFrameInd: 1,
+      xIncrement: 1
+    },
+    down: {
+      yFrameInd: 0,
+      yIncrement: 1
+    },
+    left: {
+      yFrameInd: 3,
+      xIncrement: -1
+    },
+    stop: {
+      yFrameInd: 0
+    }
+  }
+}
+
+// Player.prototype.setDoAction(continuos)
+// // Player.prototype.setLeftRightChangedActions = function () {
+// //   var tempAction = this.actions.right;
+// //   this.actions.right=this.actions.left;
+// //   this.actions.left=tempAction;
+// // }
 
 

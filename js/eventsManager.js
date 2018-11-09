@@ -15,7 +15,7 @@ EventsManager.prototype.setNormalKeyBoardKeys = function () {
   this.keyboardKeys.down = 40;
 }
 
-EventsManager.prototype.setNormalPlayerListeners = function (player) {
+EventsManager.prototype.setPlayerListeners = function (player) {
   document.onkeydown = function (event) {
     event.preventDefault();
     var key = event.keyCode;
@@ -44,5 +44,5 @@ EventsManager.prototype.setNormalPlayerListeners = function (player) {
 }
 
 EventsManager.prototype.setListeners=function(){
-  this.game.player.setListeners=this.setNormalPlayerListeners(this.game.player);
+  this.game.player.setListeners=this.setPlayerListeners(this.game.player);
 }

@@ -37,7 +37,6 @@ Game.prototype.reset = function () {
 
 
 Game.prototype.drawAll = function () {
-  this.ctx.fillRect(0,0,this.canvas.width, this.canvas.height);
   this.map.draw();
   this.player.draw();
 };
@@ -50,8 +49,8 @@ Game.prototype.changeToMap = function (mapIndex) {
   
 };
 
-Game.prototype.openHouse= function(hasKey){
-  if (hasKey){
+Game.prototype.openHouse= function(){
+  if (this.player.hasKey){
     alert("has ganado");
     this.reset();
   }
